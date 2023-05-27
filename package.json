@@ -1,0 +1,18 @@
+{
+  "name": "frog-routes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "frog-routes": "./bin/index.js"
+  },
+  "dependencies": {
+    "commander": "^10.0.1",
+    "uuid": "^9.0.0"
+  }
+}
