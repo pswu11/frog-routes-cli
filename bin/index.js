@@ -159,12 +159,22 @@ commandProject
     console.log(allConfigsNew)
   })
 
-// Projects list
+// List local projects
 commandProject
   .command("list")
+  .option("--server", "list all projects on the server")
   .description("List all the local projects")
-  .action(() => {
-    console.table(checkConfig().projects)
+  .action(async (option) => {
+    if (option.server) {
+      // TODO: list all projects on the server
+      // const responseProjects = await fetch(`${localURL}/projects`, {
+      //   method: "GET",
+      // })
+      // console.log(await responseProjects.json())
+      // console.log(responseProjects.status)
+    } else {
+      console.table(checkConfig().projects)
+    }
   })
 
 // Routes
@@ -234,13 +244,13 @@ commandRoutes
 
     console.log(deleteRoute.status)
 
-    // if (deleteRoute.status === 204) {
-    //   console.log(
-    //     `Deleted route ${routeId} under current project: ${currentProject}`
-    //   )
-    // } else {
-    //   console.error("Unexpected error, please double check the route ID")
-    // }
+    if (deleteRoute.status === 204) {
+      console.log(
+        `Deleted route ${routeId} under current project: ${currentProject}`
+      )
+    } else {
+      console.error("Unexpected error, please double check the route ID")
+    }
   })
 
 program.parse()
