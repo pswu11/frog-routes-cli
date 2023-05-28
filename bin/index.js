@@ -54,7 +54,8 @@ program
 // Projects create: name, restore: pid, checkout: name or id
 const allConfigs = checkConfig()
 const commandProject = program.command("projects")
-const localURL = "http://209.38.197.154:8000"
+const serverURL = "http://209.38.197.154:8000"
+const currentProject = checkConfig().currentProject
 
 commandProject
   .command("create")
@@ -63,7 +64,7 @@ commandProject
   .action(async (projectName) => {
     if (getUUID(allConfigs, projectName) === false) {
       // [x]: post request to add new project UUID to the server
-      const response = await fetch(`${localURL}/projects`, {
+      const response = await fetch(`${serverURL}/projects`, {
         method: "POST",
         body: JSON.stringify({ name: projectName }),
       })
@@ -81,7 +82,7 @@ commandProject
   .command("delete")
   .argument("<pid>", "Project UUID that you want to delete from the server")
   .action(async (pid) => {
-    const deleteResponse = await fetch(`${localURL}/projects/${pid}`, {
+    const deleteResponse = await fetch(`${serverURL}/projects/${pid}`, {
       method: "DELETE",
     })
     if (deleteResponse.status === 204) {
@@ -106,7 +107,7 @@ commandProject
   .action(async (pid) => {
     console.log(`Restoring project ${pid}`)
     // Send request the server to check if the uuid exists
-    const restoreResponse = await fetch(`${localURL}/projects/${pid}`, {
+    const restoreResponse = await fetch(`${serverURL}/projects/${pid}`, {
       method: "GET",
     })
     if (restoreResponse.status === 200) {
@@ -167,7 +168,7 @@ commandProject
   .action(async (option) => {
     if (option.server) {
       // TODO: list all projects on the server
-      // const responseProjects = await fetch(`${localURL}/projects`, {
+      // const responseProjects = await fetch(`${serverURL}/projects`, {
       //   method: "GET",
       // })
       // console.log(await responseProjects.json())
@@ -179,8 +180,6 @@ commandProject
 
 // Routes
 const commandRoutes = program.command("routes")
-const currentProject = checkConfig().currentProject
-const placeHolderURL = `${localURL}/projects/${currentProject}` // `https://jsonplaceholder.typicode.com/posts`
 
 // [x]: create new route under the current project
 commandRoutes
@@ -204,7 +203,7 @@ commandRoutes
     console.log(`payload data: ${myData}`)
 
     // [x]: HTTP POST request to the server with given project UUID + path + payloadData
-    const registerNewRouteResponse = await fetch(`${placeHolderURL}/routes`, {
+    const registerNewRouteResponse = await fetch(`${serverURL}/projects/${currentProject}/routes`, {
       method: "POST",
       body: JSON.stringify({
         verb: "GET",
@@ -224,7 +223,7 @@ commandRoutes
 
 // [x]: list all routes under the current project
 commandRoutes.command("list").action(async () => {
-  const responseListRoutes = await fetch(`${placeHolderURL}/routes`, {
+  const responseListRoutes = await fetch(`${serverURL}/projects/${currentProject}/routes`, {
     method: "GET",
   })
   console.log(await responseListRoutes.json())

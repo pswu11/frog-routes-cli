@@ -49,7 +49,7 @@ JavaScript HTTP Request:
 
 ```js
 async function getData(pid, routePath) {
-  const getResponse = await fetch(`${localURL}/projects/${pid}/${routePath}`, {
+  const getResponse = await fetch(`${serverURL}/projects/${pid}/${routePath}`, {
     method: "GET",
   })
   if (get.status === 200) {
