@@ -74,6 +74,29 @@ Delete route from the current project
 frog-routes routes delete <Proj>
 ```
 
+### Create new route with data
+
+JavaScript HTTP Request:
+
+```js
+async function getData(pid, routePath) {
+  const getResponse = await fetch(`${serverURL}/projects/${pid}/routes`, {
+    method: "POST",
+    body: JSON.stringify({
+      verb: "GET", // the verb here can be defiend by yourself
+      path: newPath,
+      data: myData,
+    }),
+  })
+  if (get.status === 200) {
+    const responseBody = await getResponse.json()
+    return responseBody
+  } else {
+    console.error("Unexpected error, please double check the project UUID")
+  }
+}
+```
+
 ### Get Data
 
 JavaScript HTTP Request:
@@ -84,6 +107,31 @@ async function getData(pid, routePath) {
     method: "GET",
   })
   if (get.status === 200) {
+    const responseBody = await getResponse.json()
+    return responseBody
+  } else {
+    console.error("Unexpected error, please double check the project UUID")
+  }
+}
+```
+
+### Update Data
+
+JavaScript HTTP Request:
+
+```js
+async function getData(pid, routePath) {
+  const getResponse = await fetch(
+    `${serverURL}/projects/${pid}/rouates/${routeId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        verb: "GET", // the verb has to match with the one you used to create the path
+        data: updatedData,
+      }),
+    }
+  )
+  if (get.status === 204) {
     const responseBody = await getResponse.json()
     return responseBody
   } else {

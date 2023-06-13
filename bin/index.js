@@ -185,6 +185,7 @@ const commandRoutes = program.command("routes")
 commandRoutes
   .command("create")
   .argument("<newPath>", "specify the new path, i.e. /users")
+  .argument("<verb>", "specify the verb")
   .option("--payload-data <data>", "specify a string or a path to a json file")
   .action(async (newPath, data) => {
     // check whether the payload file is empty
@@ -203,14 +204,17 @@ commandRoutes
     console.log(`payload data: ${myData}`)
 
     // [x]: HTTP POST request to the server with given project UUID + path + payloadData
-    const registerNewRouteResponse = await fetch(`${serverURL}/projects/${currentProject}/routes`, {
-      method: "POST",
-      body: JSON.stringify({
-        verb: "GET",
-        path: newPath,
-        data: myData,
-      }),
-    })
+    const registerNewRouteResponse = await fetch(
+      `${serverURL}/projects/${currentProject}/routes`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          verb: verb,
+          path: newPath,
+          data: myData,
+        }),
+      }
+    )
     const newRouteId = await registerNewRouteResponse
       .json()
       .then((json) => json.id)
@@ -223,9 +227,12 @@ commandRoutes
 
 // [x]: list all routes under the current project
 commandRoutes.command("list").action(async () => {
-  const responseListRoutes = await fetch(`${serverURL}/projects/${currentProject}/routes`, {
-    method: "GET",
-  })
+  const responseListRoutes = await fetch(
+    `${serverURL}/projects/${currentProject}/routes`,
+    {
+      method: "GET",
+    }
+  )
   console.log(await responseListRoutes.json())
 })
 
@@ -237,9 +244,12 @@ commandRoutes
     "Route ID that you want to delete from the current project"
   )
   .action(async (routeId) => {
-    const deleteRoute = await fetch(`${placeHolderURL}/routes/${routeId}`, {
-      method: "DELETE",
-    })
+    const deleteRoute = await fetch(
+      `${serverURL}/projects/${currentProject}/routes/${routeId}`,
+      {
+        method: "DELETE",
+      }
+    )
 
     console.log(deleteRoute.status)
 
@@ -250,6 +260,28 @@ commandRoutes
     } else {
       console.error("Unexpected error, please double check the route ID")
     }
+  })
+
+// [x]: update the data of a specific route
+commandRoutes
+  .command("update")
+  .argument("<routeID>", "specify the routeID you want to update, i.e. /users")
+  .option(
+    "--payload-data <updatedData>",
+    "specify a string or a path to a json file"
+  )
+  .action(async (routeID, updatedData) => {
+    const updateResponse = await fetch(
+      `${serverURL}/projects/${currentProject}/routes/${routeID}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          verb: "GET",
+          data: updatedData.payloadData,
+        }),
+      }
+    )
+    console.log(updateResponse)
   })
 
 program.parse()
