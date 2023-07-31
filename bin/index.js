@@ -187,18 +187,20 @@ commandRoutes
   .argument("<newPath>", "specify the new path, i.e. /users")
   .argument("<verb>", "specify the verb")
   .option("--payload-data <data>", "specify a string or a path to a json file")
-  .action(async (newPath, data) => {
+  .action(async (newPath, verb, data) => {
+    let myData = ""
     // check whether the payload file is empty
     if (Object.keys(data).length === 0) {
       console.error("Please provide a payload data")
       return
     }
-
-    let myData = ""
-    if (data.payloadData.includes(".json")) {
-      myData = readFileSync(data.payloadData, "utf8")
-    } else {
-      myData = data.payloadData
+    console.log(data.payloadData)
+    if (data) {
+      if (data.payloadData.includes(".json")) {
+        myData = readFileSync(data.payloadData, "utf8")
+      } else {
+        myData = data.payloadData
+      }
     }
 
     console.log(`payload data: ${myData}`)
@@ -221,7 +223,7 @@ commandRoutes
     if (registerNewRouteResponse.status === 200) {
       console.log(`Created new path ${newPath} with route id: ${newRouteId}`)
     } else {
-      console.error("Error creating new route")
+      console.error("Error creating new route", "states:", registerNewRouteResponse.status)
     }
   })
 
@@ -250,9 +252,6 @@ commandRoutes
         method: "DELETE",
       }
     )
-
-    console.log(deleteRoute.status)
-
     if (deleteRoute.status === 204) {
       console.log(
         `Deleted route ${routeId} under current project: ${currentProject}`
@@ -268,20 +267,35 @@ commandRoutes
   .argument("<routeID>", "specify the routeID you want to update, i.e. /users")
   .option(
     "--payload-data <updatedData>",
-    "specify a string or a path to a json file"
+    "a string or a path to a json file with your updated data"
   )
   .action(async (routeID, updatedData) => {
+    let myData = ""
+    // check whether the payload file is empty
+    if (Object.keys(updatedData).length === 0) {
+      console.error("Please provide a payload data")
+      return
+    }
+    console.log(updatedData.payloadData)
+    if (updatedData) {
+      if (updatedData.payloadData.includes(".json")) {
+        myData = readFileSync(updatedData.payloadData, "utf8")
+      } else {
+        myData = updatedData.payloadData
+      }
+    }
     const updateResponse = await fetch(
       `${serverURL}/projects/${currentProject}/routes/${routeID}`,
       {
         method: "PUT",
         body: JSON.stringify({
           verb: "GET",
-          data: updatedData.payloadData,
+          data: myData,
         }),
       }
     )
     console.log(updateResponse)
+    // handle errors 
   })
 
 program.parse()

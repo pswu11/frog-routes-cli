@@ -15,13 +15,8 @@ from how this is handled in reality.
 
 That's why I thought a simple tool like this would really help beginners to get
 up to speed in building out their projects, while slowly gaining more knowledge
-about HTTP. This tool can also be useful for experienced frontend developers who
+about API. This tool can also be useful for experienced frontend developers who
 just want to quickly get an MVP out without the presense of backend.
-
-[Demo Server](http://209.38.197.154:8000/): http://209.38.197.154:8000/
-
-[Example URL](http://209.38.197.154:8000/projects/9b24f47f-8e6a-4a7b-8f17-4344ba7b133b/all-admin):
-http://209.38.197.154:8000/projects/9b24f47f-8e6a-4a7b-8f17-4344ba7b133b/all-admin
 
 ## Frog Routes CLI
 
