@@ -2,18 +2,26 @@
   "name": "frog-routes",
   "version": "0.0.1",
   "description": "",
-  "main": "bin/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "bin": {
-    "frog-routes": "./bin/index.js"
+    "frog-routes": "./dist/index.js"
   },
   "dependencies": {
+    "axios": "^1.5.0",
     "commander": "^10.0.1",
     "crayon.js": "^3.3.3",
+    "figlet": "^1.6.0",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.6",
+    "@types/node": "^20.5.6",
+    "typescript": "^5.2.2"
   }
 }
